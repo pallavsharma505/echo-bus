@@ -109,37 +109,16 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
     return c.json({ ok: true });
   });
 
-  // --- Dashboard Auth Middleware ---
-  // Protect all API routes below (except /auth/*, /health, and static files)
-  app.use("*", async (c, next) => {
-    const path = c.req.path;
-
-    // Skip auth for: auth endpoints, health check
-    if (path.startsWith("/auth/") || path === "/health") {
-      return next();
-    }
-
-    // Skip for static dashboard files (non-API routes)
-    // API routes are: /health, /topics, /connections, /metrics, /dlq, /admin/*, /auth/*
-    const apiPrefixes = ["/topics", "/connections", "/metrics", "/dlq", "/admin/"];
-    const isApiRoute = apiPrefixes.some((p) => path.startsWith(p));
-    if (!isApiRoute) {
-      return next();
-    }
-
-    // Skip if admin is not set up yet (first-run mode)
-    if (!persistence.isAdminSetup()) {
-      return next();
-    }
-
-    // Check for valid session token
+  // --- Dashboard Auth Helper ---
+  // Returns a 401 Response if the request is not authenticated, or null if OK.
+  function requireDashboardAuth(c: any): Response | null {
+    if (!persistence.isAdminSetup()) return null;
     const token = c.req.header("Authorization")?.replace("Bearer ", "");
     if (!validateSession(token)) {
       return c.json({ error: "Unauthorized — please log in to the dashboard" }, 401);
     }
-
-    return next();
-  });
+    return null;
+  }
 
   // Health check
   app.get("/health", (c) => {
@@ -157,6 +136,8 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // List all active topics with subscriber counts
   app.get("/topics", (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const topics = broker.subscriptions.getTopics().map((t) => ({
       ...t,
       messageCount: persistence.getMessageCount(t.name),
@@ -166,12 +147,16 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // List all active connections
   app.get("/connections", (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const connections = broker.connections.getInfo();
     return c.json({ connections });
   });
 
   // Get metrics history
   app.get("/metrics", (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const since = parseInt(c.req.query("since") ?? "0", 10);
     const limit = parseInt(c.req.query("limit") ?? "100", 10);
     const metrics = persistence.getMetrics(since || Date.now() - 3600_000, limit);
@@ -180,6 +165,8 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // Get dead letter queue
   app.get("/dlq", (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const limit = parseInt(c.req.query("limit") ?? "50", 10);
     const deadLetters = persistence.getDeadLetters(limit);
     return c.json({ deadLetters });
@@ -187,6 +174,8 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // Purge a topic's message backlog
   app.post("/admin/purge", async (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const body = await c.req.json<{ topic: string }>();
     if (!body.topic) {
       return c.json({ error: "Missing 'topic' field" }, 400);
@@ -197,6 +186,8 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // Register a durable topic
   app.post("/admin/topics/durable", async (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const body = await c.req.json<{ topic: string }>();
     if (!body.topic) {
       return c.json({ error: "Missing 'topic' field" }, 400);
@@ -210,12 +201,16 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // List all API keys (previews only, never exposes full key)
   app.get("/admin/api-keys", (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const keys = persistence.getApiKeys();
     return c.json({ apiKeys: keys });
   });
 
   // Create a new API key
   app.post("/admin/api-keys", async (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const body = await c.req.json<{ name: string; permissions?: string[] }>();
     if (!body.name) {
       return c.json({ error: "Missing 'name' field" }, 400);
@@ -228,6 +223,8 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // Revoke an API key (soft-disable)
   app.patch("/admin/api-keys/:id/revoke", (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const id = c.req.param("id");
     const revoked = persistence.revokeApiKey(id);
     if (!revoked) return c.json({ error: "API key not found" }, 404);
@@ -236,6 +233,8 @@ export function createApp(broker: Broker, persistence: PersistenceLayer, tokenMa
 
   // Delete an API key permanently
   app.delete("/admin/api-keys/:id", (c) => {
+    const authErr = requireDashboardAuth(c);
+    if (authErr) return authErr;
     const id = c.req.param("id");
     const deleted = persistence.deleteApiKey(id);
     if (!deleted) return c.json({ error: "API key not found" }, 404);
