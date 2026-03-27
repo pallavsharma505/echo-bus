@@ -39,7 +39,16 @@
     "real-time",
     "event-driven"
   ],
-  "license": "MIT",
+  "author": "Pallav Sharma",
+  "license": "MIT-Attribution",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pallavsharma505/echo-bus"
+  },
+  "homepage": "https://github.com/pallavsharma505/echo-bus#readme",
+  "bugs": {
+    "url": "https://github.com/pallavsharma505/echo-bus/issues"
+  },
   "devDependencies": {
     "tsup": "^8.0.0",
     "typescript": "^5.7.0"
