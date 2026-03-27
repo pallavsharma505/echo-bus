@@ -1,0 +1,17 @@
+services:
+  echobus:
+    build: .
+    container_name: echobus
+    ports:
+      - "9000:9000"  # WebSocket (Broker)
+      - "9001:9001"  # HTTP (API + Dashboard)
+    volumes:
+      - ./echobus_data:/data
+    environment:
+      - BROKER_PORT=9000
+      - API_PORT=9001
+      - DB_PATH=/data/echobus.db
+    restart: unless-stopped
+
+volumes:
+  echobus_data:

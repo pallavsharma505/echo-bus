@@ -1,0 +1,15 @@
+{
+  "name": "echobus",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "bun run dev:api & bun run dev:ui & wait",
+    "dev:broker": "bun run --watch packages/broker/src/index.ts",
+    "dev:api": "bun run --watch packages/api/src/index.ts",
+    "dev:ui": "cd packages/ui && bunx --bun vite",
+    "build:ui": "cd packages/ui && bunx --bun vite build",
+    "test": "cd packages/broker && bun test",
+    "loadtest": "bun run scripts/loadtest.ts"
+  }
+}
