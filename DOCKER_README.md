@@ -29,7 +29,7 @@ docker run -d \
   -p 9000:9000 \
   -p 9001:9001 \
   -v echobus_data:/data \
-  pallavsharma505/warehouse-of-logs
+  pallavsharma505/echobus
 ```
 
 That's it! EchoBus is now running:
@@ -55,7 +55,7 @@ version: "3.8"
 
 services:
   echobus:
-    image: pallavsharma505/warehouse-of-logs
+    image: pallavsharma505/echobus
     ports:
       - "9000:9000"   # WebSocket broker
       - "9001:9001"   # HTTP API + Dashboard
@@ -267,7 +267,7 @@ The database uses WAL mode for high concurrent read/write performance.
 ## 📖 More Information
 
 - **GitHub**: [github.com/pallavsharma505/warehouse-of-logs](https://github.com/pallavsharma505/warehouse-of-logs)
-- **Docker**: [hub.docker.com/r/pallavsharma505/warehouse-of-logs](https://hub.docker.com/r/pallavsharma505/warehouse-of-logs)
+- **Docker**: [hub.docker.com/r/pallavsharma505/echobus](https://hub.docker.com/r/pallavsharma505/echobus)
 - **npm client**: [npmjs.com/package/echobus](https://www.npmjs.com/package/echobus)
 - **Usage Guide**: [HowToUse.md](https://github.com/pallavsharma505/warehouse-of-logs/blob/main/HowToUse.md)
 
