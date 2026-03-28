@@ -1,6 +1,6 @@
 {
   "name": "echobus",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Official client library for EchoBus — a high-performance Pub/Sub message broker with RPC and streaming",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

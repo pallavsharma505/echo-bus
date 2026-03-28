@@ -1,6 +1,6 @@
 # 🐇 echobus
 
-Official client library for [EchoBus](https://github.com/pallavsharma505/warehouse-of-logs) — a high-performance Pub/Sub message broker with RPC and streaming, built on WebSockets.
+Official client library for [EchoBus](https://github.com/pallavsharma505/echo-bus) — a high-performance Pub/Sub message broker with RPC and streaming, built on WebSockets.
 
 Works in **Node.js** (v21+), **Bun**, and the **browser** — zero dependencies.
 
