@@ -1,7 +1,8 @@
 # 🐇 EchoBus
 
-[![Docker](https://img.shields.io/docker/v/pallavsharma505/echobus?label=Docker%20Hub&logo=docker)](https://hub.docker.com/r/pallavsharma505/echobus)
+[![Docker](https://img.shields.io/docker/v/pallavsharma505/warehouse-of-logs?label=Docker%20Hub&logo=docker)](https://hub.docker.com/r/pallavsharma505/warehouse-of-logs)
 [![npm](https://img.shields.io/npm/v/echobus?logo=npm)](https://www.npmjs.com/package/echobus)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/pallavsharma505/warehouse-of-logs)
 
 A high-performance, lightweight Pub/Sub message broker built entirely on WebSockets and TypeScript, powered by Bun.
 

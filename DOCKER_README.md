@@ -29,7 +29,7 @@ docker run -d \
   -p 9000:9000 \
   -p 9001:9001 \
   -v echobus_data:/data \
-  pallavsharma505/echobus
+  pallavsharma505/warehouse-of-logs
 ```
 
 That's it! EchoBus is now running:
@@ -55,7 +55,7 @@ version: "3.8"
 
 services:
   echobus:
-    image: pallavsharma505/echobus
+    image: pallavsharma505/warehouse-of-logs
     ports:
       - "9000:9000"   # WebSocket broker
       - "9001:9001"   # HTTP API + Dashboard
@@ -266,14 +266,15 @@ The database uses WAL mode for high concurrent read/write performance.
 
 ## 📖 More Information
 
-- **GitHub**: [github.com/pallavsharma505/echo-bus](https://github.com/pallavsharma505/echo-bus)
+- **GitHub**: [github.com/pallavsharma505/warehouse-of-logs](https://github.com/pallavsharma505/warehouse-of-logs)
+- **Docker**: [hub.docker.com/r/pallavsharma505/warehouse-of-logs](https://hub.docker.com/r/pallavsharma505/warehouse-of-logs)
 - **npm client**: [npmjs.com/package/echobus](https://www.npmjs.com/package/echobus)
-- **Usage Guide**: [HowToUse.md](https://github.com/pallavsharma505/echo-bus/blob/main/HowToUse.md)
+- **Usage Guide**: [HowToUse.md](https://github.com/pallavsharma505/warehouse-of-logs/blob/main/HowToUse.md)
 
 ---
 
 ## 📄 License
 
-MIT License with Attribution — free to use, attribution required for derived works and products. See [LICENSE](https://github.com/pallavsharma505/echo-bus/blob/main/LICENSE).
+MIT License with Attribution — free to use, attribution required for derived works and products. See [LICENSE](https://github.com/pallavsharma505/warehouse-of-logs/blob/main/LICENSE).
 
 Copyright © 2026 Pallav Sharma
